@@ -20,7 +20,6 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [simularHome,setSimularHome] =useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -30,7 +29,7 @@ const LoginScreen = ({ navigation }) => {
         try {
           await login(email, password);
           console.log("Login exitoso");
-          setSimularHome(true);
+          navigation.replace("Home");
         } catch (error) {
           console.error("Error al iniciar sesión:", error.message);
           setErrorMessage("Correo o contraseña incorrectos");
@@ -46,13 +45,7 @@ const LoginScreen = ({ navigation }) => {
     
   };
 
-  if(simularHome){
-    return(
-        <View>
-            <Text>soy home</Text>
-        </View>
-    )
-  }
+  
 
   return (
     <View style={styles.container}>
