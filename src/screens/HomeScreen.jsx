@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Image, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { getTasks } from "../services/database"; 
+import { getTasks, deleteTask } from "../services/database"; 
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../themes/colors";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const isFocused = useIsFocused(); // detecta cuando la pantalla está activa
+  const isFocused = useIsFocused();
   const [tasks, setTasks] = useState([]);
+  
+
+
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -22,12 +33,35 @@ export default function HomeScreen() {
     if (isFocused) loadTasks(); 
   }, [isFocused]);
 
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteTask(id); 
+      setTasks(tasks.filter((task) => task.id !== id));
+      console.log("Tarea eliminada correctamente:", id);
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+    }
+  };
+
+   const handleCompleted = (id) => {
+    if(id){
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
+        )
+      );
+
+    }
+     
+   };
+
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      {/* Lista de tareas */}
+    <View style={styles.container}>
+      <Text style={styles.title}>Tasks List</Text>
       {tasks.length === 0 ? (
         <Text style={{ textAlign: "center", marginTop: 20 }}>
-          No hay tareas guardadas aún.
+          There are no saved tasks.
         </Text>
       ) : (
         <FlatList
@@ -48,7 +82,6 @@ export default function HomeScreen() {
                 flexDirection: "row",
               }}
             >
-              {/* Imagen */}
               {item.image ? (
                 <Image
                   source={{ uri: item.image }}
@@ -62,9 +95,7 @@ export default function HomeScreen() {
                 />
               ) : null}
 
-              {/* Contenido textual */}
               <View style={{ flex: 1, justifyContent: "center" }}>
-                {/* Título */}
                 <Text
                   style={{
                     fontSize: 18,
@@ -75,8 +106,6 @@ export default function HomeScreen() {
                 >
                   {item.title}
                 </Text>
-
-                {/* Fila: descripción + iconos */}
                 <View
                   style={{
                     flexDirection: "row",
@@ -102,16 +131,20 @@ export default function HomeScreen() {
                       gap: 10,
                     }}
                   >
-                    <TouchableOpacity onPress={() => handleComplete(item.id)}>
+                    <TouchableOpacity onPress={() => handleCompleted(item.id)}>
                       <Ionicons
-                        name="checkmark-circle"
+                        name={item.isCompleted ? "star" : "star-outline"}
                         size={26}
-                        color="#34C759"
+                        color={item.isCompleted ? "#FFD700" : "#CCCCCC"}
                       />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                      <Ionicons name="trash" size={26} color="#FF3B30" />
+                      <Ionicons
+                        name="trash"
+                        size={26}
+                        color={colors.redCarmesi}
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -121,23 +154,49 @@ export default function HomeScreen() {
         />
       )}
 
-      {/* Botón Nueva Tarea */}
       <TouchableOpacity
-        style={{
-          backgroundColor: "#007AFF",
-          padding: 14,
-          borderRadius: 10,
-          alignItems: "center",
-          position: "absolute",
-          bottom: 30,
-          right: 20,
-        }}
+        style={styles.btn}
         onPress={() => navigation.navigate("NewTaskScreen")}
       >
-        <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
-          Nueva tarea
+        <Text
+          style={{
+            color: "white",
+            fontSize: 16,
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          New Task
         </Text>
       </TouchableOpacity>
     </View>
   );
 }
+
+ const styles = StyleSheet.create({
+   container: {
+     flex: 1,
+     backgroundColor: colors.ligthyellow,
+     padding: 16,
+   },
+   title: {
+     color: colors.darkBlue,
+     fontSize: 40,
+     fontWeight: "700",
+     textAlign: "center",
+     marginTop: 20,
+     marginBottom: 20,
+   },
+   btn: {
+     padding: 16,
+     paddingHorizontal: 32,
+     backgroundColor: colors.redCarmesi,
+     borderRadius: 16,
+     marginTop: 32,
+     marginBottom:32
+   },
+ });
+
+
+
+

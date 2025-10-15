@@ -38,3 +38,10 @@ export const insertTask = async (title, description, photo) => {
   );
 };
 
+
+export const deleteTask = async (id) => {
+  await initDb();
+  await db.runAsync("DELETE FROM tasks WHERE id = ?", [id]);
+};
+
+

@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  StyleSheet
 } from "react-native";
+import { colors } from "../themes/colors";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { insertTask } from "../services/database"; // 👈 importa tu función centralizada
@@ -47,7 +49,7 @@ export default function NewTaskScreen() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={styles.container}>
       <Text style={{ fontSize: 18, fontWeight: "bold" }}>Título</Text>
       <TextInput
         value={title}
@@ -122,3 +124,28 @@ export default function NewTaskScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.ligthyellow,
+    padding: 16,
+  },
+  title: {
+    color: colors.darkBlue,
+    fontSize: 40,
+    fontWeight: "700",
+    textAlign: "center",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  btn: {
+    padding: 16,
+    paddingHorizontal: 32,
+    backgroundColor: colors.redCarmesi,
+    borderRadius: 16,
+    marginTop: 32,
+    marginBottom: 32,
+  },
+});
+
