@@ -32,7 +32,7 @@ It uses **Firebase Authentication** for secure login and **SQLite** for offline 
 
 1. **Clone the repository**
    bash
-   git clone https://github.com/yourusername/mytask.git
+   git clone https://github.com/earamosb8/Rn-expo-myTasks.git
    cd mytask
 
 2. Install dependencies
