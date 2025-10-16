@@ -13,6 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { insertTask } from "../services/database"; // 👈 importa tu función centralizada
 export default function NewTaskScreen() {
+  
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
@@ -31,30 +32,29 @@ export default function NewTaskScreen() {
     }
   };
 
-  // 💾 guardar tarea
   const saveTask = async () => {
     if (!title.trim() || !photo) {
-      Alert.alert("Campos requeridos", "Debes ingresar un título y una foto.");
+      Alert.alert("Required fields", "You must enter a title and a photo.");
       return;
     }
 
     try {
-      await insertTask(title, description, photo); // 👈 guarda usando tu módulo
-      Alert.alert("Éxito", "Tarea guardada correctamente");
+      await insertTask(title, description, photo); // 👈 saves using your module
+      Alert.alert("Success", "Task saved successfully");
       navigation.goBack();
     } catch (error) {
-      console.error("Error al guardar la tarea:", error);
-      Alert.alert("Error", "Hubo un problema al guardar la tarea.");
+      console.error("Error saving the task:", error);
+      Alert.alert("Error", "There was a problem saving the task.");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 18, fontWeight: "bold" }}>Título</Text>
+      <Text style={{ fontSize: 18, fontWeight: "bold" }}>Title</Text>
       <TextInput
         value={title}
         onChangeText={setTitle}
-        placeholder="Escribe el título"
+        placeholder="Write the title"
         style={{
           borderWidth: 1,
           borderColor: "#ccc",
@@ -64,11 +64,11 @@ export default function NewTaskScreen() {
         }}
       />
 
-      <Text style={{ fontSize: 18, fontWeight: "bold" }}>Descripción</Text>
+      <Text style={{ fontSize: 18, fontWeight: "bold" ,marginTop:5 }}>Description</Text>
       <TextInput
         value={description}
         onChangeText={setDescription}
-        placeholder="Escribe una descripción"
+        placeholder="Write a Description"
         multiline
         style={{
           borderWidth: 1,
@@ -91,7 +91,7 @@ export default function NewTaskScreen() {
         }}
       >
         <Text style={{ color: "white", fontWeight: "bold" }}>
-          Seleccionar foto
+          Select Photo
         </Text>
       </TouchableOpacity>
 
@@ -109,16 +109,10 @@ export default function NewTaskScreen() {
 
       <TouchableOpacity
         onPress={saveTask}
-        style={{
-          backgroundColor: "#34C759",
-          padding: 14,
-          borderRadius: 10,
-          alignItems: "center",
-          marginTop: 20,
-        }}
+        style={styles.btn}
       >
-        <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
-          Guardar tarea
+        <Text style={{ color: "white", fontSize: 16, fontWeight: "bold",textAlign:'center' }}>
+          Save Task
         </Text>
       </TouchableOpacity>
     </View>
@@ -128,6 +122,7 @@ export default function NewTaskScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:40,
     backgroundColor: colors.ligthyellow,
     padding: 16,
   },

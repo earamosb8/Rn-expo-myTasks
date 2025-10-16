@@ -24,25 +24,22 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     setLoading(true);
     setErrorMessage("");
-    if(email && password){
-        setErrorMessage("");
-        try {
-          await login(email, password);
-          console.log("Login exitoso");
-          navigation.replace("Home");
-        } catch (error) {
-          console.error("Error al iniciar sesión:", error.message);
-          setErrorMessage("Correo o contraseña incorrectos");
-        } finally {
-          setLoading(false);
-        }
-
-    } else {
+    if (email && password) {
+      setErrorMessage("");
+      try {
+        await login(email, password);
+        console.log("Login successful");
+        navigation.replace("Home");
+      } catch (error) {
+        console.error("Error logging in:", error.message);
+        setErrorMessage("Incorrect email or password");
+      } finally {
         setLoading(false);
-        setErrorMessage("Campos Vacios");
-
+      }
+    } else {
+      setLoading(false);
+      setErrorMessage("Empty fields");
     }
-    
   };
 
   
